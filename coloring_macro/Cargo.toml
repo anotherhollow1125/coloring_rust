@@ -1,0 +1,13 @@
+[package]
+name = "coloring_macro"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = { workspace = true }
+syn = { workspace = true }
+quote = { workspace = true }
+num-traits = "0.2.19"

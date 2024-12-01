@@ -1,0 +1,13 @@
+[package]
+name = "coloring_cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true }
+dialoguer = { workspace = true }
+syn = { workspace = true }
+proc-macro2 = { workspace = true }
+coloring_macro = { path = "../coloring_macro" }
+quote = { workspace = true }

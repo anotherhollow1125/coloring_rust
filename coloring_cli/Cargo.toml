@@ -9,5 +9,7 @@ clap = { workspace = true }
 dialoguer = { workspace = true }
 syn = { workspace = true }
 proc-macro2 = { workspace = true }
-coloring_macro = { path = "../coloring_macro" }
 quote = { workspace = true }
+console = { workspace = true }
+coloring_macro = { path = "../coloring_macro" }
+coloring_common = { path = "../coloring_common" }

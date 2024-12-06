@@ -127,7 +127,9 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "coloring_common",
  "coloring_macro",
+ "console",
  "dialoguer",
  "proc-macro2",
  "quote",
@@ -138,6 +140,7 @@ dependencies = [
 name = "coloring_common"
 version = "0.1.0"
 dependencies = [
+ "clap",
  "proc-macro2",
  "syn",
 ]

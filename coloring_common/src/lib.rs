@@ -1,11 +1,12 @@
-use proc_macro2::Span;
+use clap::ValueEnum;
 use std::collections::HashMap;
 use std::fmt::Debug;
+use std::ops::Range;
 use syn::spanned::Spanned;
 use syn::visit::Visit;
 
 // ref: https://veykril.github.io/tlborm/decl-macros/minutiae/fragment-specifiers.html
-#[derive(PartialEq, Eq, Hash, Debug)]
+#[derive(PartialEq, Eq, Hash, Debug, Clone, Copy, ValueEnum)]
 pub enum FragSpecs {
     Block,
     Expr,
@@ -26,14 +27,14 @@ pub enum FragSpecs {
 pub struct Colored<T: Debug> {
     pub inner: T,
     pub visit: for<'a> fn(&'a mut Colored<T>, &T),
-    pub spans: HashMap<FragSpecs, Vec<Span>>,
+    pub ranges: HashMap<FragSpecs, Vec<Range<usize>>>,
 }
 
 macro_rules! visit {
     ($elm:ident, $elmty:ty, $key:expr) => {
         fn $elm(&mut self, i: &'ast $elmty) {
-            let spans = self.spans.entry($key).or_default();
-            spans.push(i.span());
+            let ranges = self.ranges.entry($key).or_default();
+            ranges.push(i.span().byte_range());
 
             ::syn::visit::$elm(self, i);
         }
@@ -44,6 +45,7 @@ impl<'ast, T> Visit<'ast> for Colored<T>
 where
     T: Debug,
 {
+    visit!(visit_file, syn::File, FragSpecs::Item);
     visit!(visit_block, syn::Block, FragSpecs::Block);
     visit!(visit_expr, syn::Expr, FragSpecs::Expr);
     visit!(visit_ident, syn::Ident, FragSpecs::Ident);
@@ -78,13 +80,14 @@ macro_rules! impl_colored {
                 Self {
                     inner,
                     visit: |v, node| ::syn::visit::$fn_name(v, node),
-                    spans: HashMap::new(),
+                    ranges: HashMap::new(),
                 }
             }
         }
     };
 }
 
+impl_colored!(ColoredFile, syn::File, visit_file);
 impl_colored!(ColoredBlock, syn::Block, visit_block);
 impl_colored!(ColoredExpr, syn::Expr, visit_expr);
 impl_colored!(ColoredIdent, syn::Ident, visit_ident);

@@ -5,6 +5,7 @@ fn add<T: Num>(a: T, b: T) -> T {
     a + b
 }
 
+#[allow(unused)]
 trait Hoge {}
 
 fn main() {

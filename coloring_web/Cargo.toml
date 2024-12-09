@@ -1,0 +1,10 @@
+[package]
+name = "coloring_web"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+material-yew = { version = "0.3.0", features = ["full"] }
+yew = { version = "0.20.0", features = ["csr"] }
+coloring_common = { path = "../coloring_common" }
+strum = { version = "0.26.3", features = ["derive"] }

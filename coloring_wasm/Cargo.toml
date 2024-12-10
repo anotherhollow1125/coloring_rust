@@ -1,0 +1,18 @@
+[package]
+name = "coloring_wasm"
+version = "0.1.0"
+authors = ["namnium"]
+repository = "https://github.com/anotherhollow1125/coloring_rust"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wasm-bindgen = "0.2.99"
+serde = { workspace = true }
+serde-wasm-bindgen = "0.6.5"
+coloring_common = { path = "../coloring_common" }
+coloring_macro = { path = "../coloring_macro" }
+syn = { workspace = true }
+html-escape = "0.2.13"

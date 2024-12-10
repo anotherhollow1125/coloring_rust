@@ -7,3 +7,5 @@ edition = "2021"
 proc-macro2 = { workspace = true }
 syn = { workspace = true }
 clap = { workspace = true }
+serde = { workspace = true }
+strum = { workspace = true }

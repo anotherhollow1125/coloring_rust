@@ -1,12 +1,15 @@
 use clap::ValueEnum;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::ops::Range;
+use strum::Display;
 use syn::spanned::Spanned;
 use syn::visit::Visit;
 
 // ref: https://veykril.github.io/tlborm/decl-macros/minutiae/fragment-specifiers.html
-#[derive(PartialEq, Eq, Hash, Debug, Clone, Copy, ValueEnum)]
+#[derive(PartialEq, Eq, Hash, Debug, Clone, Copy, ValueEnum, Serialize, Deserialize, Display)]
+#[serde(rename_all = "lowercase")]
 pub enum FragSpecs {
     Block,
     Expr,

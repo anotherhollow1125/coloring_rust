@@ -11,3 +11,4 @@ proc-macro2 = { workspace = true }
 syn = { workspace = true }
 quote = { workspace = true }
 num-traits = "0.2.19"
+itertools = "0.13.0"

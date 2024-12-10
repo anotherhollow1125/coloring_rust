@@ -14,5 +14,40 @@ fn main() {
 
         let res = add::<T>(1, 2);
         println!("{}: {}", stringify!(T), res);
+
+        fn hello_~T() {
+            println!("Hello, {}!", stringify!(T));
+        }
     });
+
+    hello_usize();
+    hello_i32();
+    hello_u32();
+
+    struct Fuga;
+
+    repeat_for_types!(for T in [Fuga] {
+        #[allow(non_snake_case)]
+        fn hello_~T() {
+            println!("Hello, {}!", stringify!(T));
+        }
+    });
+
+    hello_Fuga();
+
+    enum Eennumm {
+        A,
+        B,
+        C,
+    }
+
+    let enm = Eennumm::A;
+
+    repeat_for_types!(for T in [A, B, C] {
+        match enm {
+            #(
+                Eennumm::T => println!("{} is matched!", stringify!(T)),
+            )*
+        }
+    })
 }

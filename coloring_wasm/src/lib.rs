@@ -14,7 +14,8 @@ struct Input {
 
 #[derive(Serialize)]
 struct Output {
-    hit_filter: Option<Filter>,
+    hit_top_filter: Option<Filter>,
+    hit_filters: Vec<Filter>,
     colored: String,
 }
 
@@ -27,24 +28,43 @@ pub fn colored(input: JsValue) -> Result<JsValue, JsValue> {
     Ok(serde_wasm_bindgen::to_value(&output)?)
 }
 
+struct TopFilter {
+    filter: Filter,
+    colored: String,
+}
+
 fn colored_inner(Input { code, filters }: Input) -> Output {
     let mut errors = String::new();
 
-    for filter in filters {
+    let mut top_filter = None;
+    for &filter in filters.iter() {
         match filter.try_parse(&code) {
             Ok(ranges) => {
-                return Output {
-                    hit_filter: Some(filter),
-                    colored: to_html_string(&code, ranges),
+                if top_filter.is_none() {
+                    top_filter = Some(TopFilter {
+                        filter,
+                        colored: to_html_string(&code, ranges),
+                    });
                 }
             }
             Err(e) => errors.push_str(&e),
         }
     }
 
-    Output {
-        hit_filter: None,
-        colored: errors.replace("\n", "<br />"),
+    match top_filter {
+        Some(TopFilter { filter, colored }) => Output {
+            hit_top_filter: Some(filter),
+            hit_filters: filters
+                .into_iter()
+                .filter(|f| f.try_parse(&code).is_ok())
+                .collect(),
+            colored,
+        },
+        None => Output {
+            hit_top_filter: None,
+            hit_filters: vec![],
+            colored: errors,
+        },
     }
 }
 
@@ -117,7 +137,13 @@ fn to_html_string(content: &str, ranges: HashMap<FragSpecs, Vec<Range<usize>>>) 
 
     content
         .char_indices()
-        .map(|(i, c)| spanned(c, &classes_map[i]))
+        .map(|(i, c)| {
+            if !classes_map[i].is_empty() {
+                spanned(c, &classes_map[i])
+            } else {
+                encode_text(&c.to_string()).to_string()
+            }
+        })
         .collect()
 }
 
@@ -127,10 +153,6 @@ fn spanned(s: char, classes: &[String]) -> String {
     format!(
         "<span class=\"{}\">{}</span>",
         class,
-        if s == '\n' {
-            "<br />".to_string()
-        } else {
-            encode_text(&s.to_string()).to_string()
-        }
+        encode_text(&s.to_string())
     )
 }

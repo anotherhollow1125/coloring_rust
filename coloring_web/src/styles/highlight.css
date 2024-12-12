@@ -1,0 +1,59 @@
+/* 仮置き。最終的にはReactで動的生成 */
+
+.block {
+    color: black;
+}
+
+.item {
+    color: darkblue;
+}
+
+@media (prefers-color-scheme: dark) {
+    .block {
+        color: white;
+    }
+
+    .item {
+        color: lightblue;
+    }
+}
+
+.expr {
+    color: cyan;
+}
+
+.literal {
+    color: lightcoral;
+}
+
+.stmt {
+    color: lightskyblue;
+}
+
+.ident {
+    color: orange;
+}
+
+.lifetime {
+    color: aquamarine;
+}
+
+.pat {
+    color: lightgreen;
+}
+
+.path {
+    color: lime;
+}
+
+.ty {
+    color: green;
+}
+
+.vis {
+    color: pink;
+}
+
+.meta {
+    color: violet;
+}

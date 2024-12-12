@@ -2,12 +2,12 @@ import Head from "next/head";
 import { Source_Code_Pro } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import InputField from "@/components/InputField";
-import { Button, createTheme, ThemeProvider } from "@mui/material";
+import { Button, Checkbox, createTheme, Divider, ListItem, ListItemIcon, ThemeProvider } from "@mui/material";
 import { useState } from "react";
 import OutputField from "@/components/OutputField";
 import { colored } from "coloring_wasm";
 import Grid from "@mui/material/Grid2";
-import FilterList, { Filter } from "@/components/filter/FilterList";
+import FilterColumn, { initFilterList } from "@/components/filter/FilterColumn";
 
 const SourceCodePro = Source_Code_Pro({
   weight: "400",
@@ -21,30 +21,6 @@ const theme = createTheme({
     dark: true,
   },
 });
-
-const filterNew= (name: string) => {
-  return {
-    name,
-    active: true,
-  };
-}
-
-const initFilterList = (): Filter[] => {
-  return [
-    filterNew("file"),
-    filterNew("item"),
-    filterNew("block"),
-    filterNew("stmt"),
-    filterNew("expr"),
-    filterNew("type"),
-    filterNew("path"),
-    filterNew("visibility"),
-    filterNew("ident"),
-    filterNew("lifetime"),
-    filterNew("lit"),
-    filterNew("meta"),
-  ];
-};
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -72,24 +48,17 @@ export default function Home() {
           <InputField input={input} setInput={setInput} />
           <>Whole Match: {hit_top_filter}</>
           <OutputField output={output} />
-          <Grid container spacing={10}>
-          <Grid size={4}>
-            <FilterList
+          <Divider orientation="horizontal" />
+          <Grid container spacing={2}>
+          <Grid size={6}>
+            <FilterColumn
               filterList={filterList}
               setFilterList={setFilterList}
-              hitTopFilter={hit_top_filter}
-              hitFilters={hit_filters}
+              hit_top_filter={hit_top_filter}
+              hit_filters={hit_filters}
             />
-            <Button
-              variant="outlined"
-              onClick={() => {
-                setFilterList(initFilterList());
-              }}
-            >
-              Reset Order
-            </Button>
           </Grid>
-          <Grid size={4}>
+          <Grid size={6}>
             preparing...
           </Grid>
         </Grid>

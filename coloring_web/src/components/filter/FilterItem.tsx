@@ -22,12 +22,11 @@ export default function FilterItem(
   } : undefined;
 
   return (<ListItem
-    sx={{ display: 'flex', alignItems: 'center' }}
+    sx={{ display: 'flex', alignItems: 'center', maxWidth: '400px' }}
     key={filterName}
     id={filterName}
     ref={setNodeRef}
     style={style}
-    {...listeners}
     {...attributes}
   >
     <ListItemIcon>
@@ -42,7 +41,10 @@ export default function FilterItem(
 
     <ListItemText primary={filterName} />
 
-    <Box sx={{ ml: 'auto' }}>
+    <Box
+      sx={{ ml: 'auto' }}
+      {...listeners}
+    >
       {icon(hit)}
     </Box>
   </ListItem>);

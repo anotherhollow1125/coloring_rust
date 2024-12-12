@@ -37,7 +37,6 @@ export default function FilterList({filterList, setFilterList, hitTopFilter, hit
   }, [filterList]);
 
   return (
-    <List>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -47,6 +46,7 @@ export default function FilterList({filterList, setFilterList, hitTopFilter, hit
           items={filterList.map((filter) => filter.name)}
           strategy={verticalListSortingStrategy}
         >
+          <List>
           {
             filterList.map(filter => {
               const setActive = (active: boolean) => {
@@ -69,9 +69,9 @@ export default function FilterList({filterList, setFilterList, hitTopFilter, hit
               />);
             })
           }
+          </List>
         </SortableContext>
       </DndContext>
-    </List>
   );
 }
 

@@ -1,3 +1,5 @@
+"use client";
+
 import Head from "next/head";
 import { Source_Code_Pro } from "next/font/google";
 import styles from "@/styles/Home.module.css";
@@ -7,7 +9,9 @@ import { useState } from "react";
 import OutputField from "@/components/OutputField";
 import { colored } from "coloring_wasm";
 import Grid from "@mui/material/Grid2";
-import FilterColumn, { initFilterList } from "@/components/filter/FilterColumn";
+import FilterColumn from "@/components/filter/FilterColumn";
+import { initFilterArray } from "@/components/filter/types";
+import { initHighlightTargetArray } from "@/components/frags/types";
 
 const SourceCodePro = Source_Code_Pro({
   weight: "400",
@@ -24,7 +28,8 @@ const theme = createTheme({
 
 export default function Home() {
   const [input, setInput] = useState("");
-  const [filterList, setFilterList] = useState(initFilterList());
+  const [filterList, setFilterList] = useState(initFilterArray());
+  const [highlightTargetList, setHighlightTargetList] = useState(initHighlightTargetArray());
 
   const { hit_top_filter, hit_filters, colored: output } = colored({
     code: input,
@@ -47,7 +52,7 @@ export default function Home() {
           <h1>Rust フラグメント識別子判別器</h1>
           <InputField input={input} setInput={setInput} />
           <>Whole Match: {hit_top_filter}</>
-          <OutputField output={output} />
+          <OutputField output={output} frags={highlightTargetList} />
           <Divider orientation="horizontal" />
           <Grid container spacing={2}>
           <Grid size={6}>
@@ -59,7 +64,7 @@ export default function Home() {
             />
           </Grid>
           <Grid size={6}>
-            preparing...
+            Highlighting Priority
           </Grid>
         </Grid>
         </main>

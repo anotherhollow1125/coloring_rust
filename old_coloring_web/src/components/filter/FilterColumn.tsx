@@ -1,7 +1,10 @@
+"use client";
+
 import { Button, Checkbox, Divider, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import FilterList, { Filter } from "./FilterList";
+import FilterList from "./FilterList";
 import { useState } from "react";
 import { SwapVert } from "@mui/icons-material";
+import { Filter, initFilterArray } from "./types";
 
 interface FilterColumnProps {
   filterList: Filter[];
@@ -9,30 +12,6 @@ interface FilterColumnProps {
   hit_top_filter: string,
   hit_filters: string[],
 }
-
-const filterNew= (name: string) => {
-  return {
-    name,
-    active: true,
-  };
-};
-
-export const initFilterList = (): Filter[] => {
-  return [
-    filterNew("file"),
-    filterNew("item"),
-    filterNew("block"),
-    filterNew("stmt"),
-    filterNew("expr"),
-    filterNew("type"),
-    filterNew("path"),
-    filterNew("visibility"),
-    filterNew("ident"),
-    filterNew("lifetime"),
-    filterNew("lit"),
-    filterNew("meta"),
-  ];
-};
 
 export default function FilterColumn({
   filterList,
@@ -79,7 +58,7 @@ export default function FilterColumn({
       <Button
         variant="outlined"
         onClick={() => {
-          setFilterList(initFilterList());
+          setFilterList(initFilterArray());
         }}
       >
         Reset Order

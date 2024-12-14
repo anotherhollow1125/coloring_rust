@@ -1,13 +1,11 @@
+"use client";
+
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import FilterItem from "./FilterItem";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useCallback } from "react";
 import { List } from "@mui/material";
-
-export interface Filter {
-  name: string,
-  active: boolean,
-}
+import { Filter } from "./types";
 
 interface FilterListProps {
   filterList: Filter[];
@@ -62,6 +60,7 @@ export default function FilterList({filterList, setFilterList, hitTopFilter, hit
               };
 
               return (<FilterItem
+                key={filter.name}
                 filterName={filter.name}
                 active={filter.active}
                 setActive={setActive}

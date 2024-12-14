@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Checkbox, IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { Check, CheckCircle, DragIndicator, Filter } from "@mui/icons-material";
 import { useSortable } from "@dnd-kit/sortable";
@@ -23,7 +25,6 @@ export default function FilterItem(
 
   return (<ListItem
     sx={{ display: 'flex', alignItems: 'center', maxWidth: '400px' }}
-    key={filterName}
     id={filterName}
     ref={setNodeRef}
     style={style}

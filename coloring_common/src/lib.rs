@@ -8,7 +8,20 @@ use syn::spanned::Spanned;
 use syn::visit::Visit;
 
 // ref: https://veykril.github.io/tlborm/decl-macros/minutiae/fragment-specifiers.html
-#[derive(PartialEq, Eq, Hash, Debug, Clone, Copy, ValueEnum, Serialize, Deserialize, Display)]
+#[derive(
+    PartialEq,
+    Eq,
+    Hash,
+    Debug,
+    Clone,
+    Copy,
+    ValueEnum,
+    Serialize,
+    Deserialize,
+    Display,
+    PartialOrd,
+    Ord,
+)]
 #[serde(rename_all = "lowercase")]
 pub enum FragSpecs {
     Block,

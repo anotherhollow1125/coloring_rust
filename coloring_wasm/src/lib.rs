@@ -4,6 +4,7 @@ use coloring_common::{Colored, FragSpecs};
 use coloring_macro::repeat_for_types;
 use html_escape::encode_text;
 use serde::{Deserialize, Serialize};
+use std::cmp::Ordering;
 use wasm_bindgen::prelude::*;
 
 #[derive(Deserialize)]
@@ -76,11 +77,14 @@ enum Filter {
     Block,
     Stmt,
     Expr,
+    #[serde(rename = "ty")]
     Type,
     Path,
+    #[serde(rename = "vis")]
     Visibility,
     Ident,
     Lifetime,
+    #[serde(rename = "literal")]
     Lit,
     Meta,
 }
@@ -118,41 +122,121 @@ impl Filter {
     }
 }
 
-fn classes_map(len: usize, ranges: HashMap<FragSpecs, Vec<Range<usize>>>) -> Vec<Vec<String>> {
-    let mut classes: Vec<Vec<String>> = (0..len).map(|_| Vec::new()).collect();
+#[derive(Debug, PartialEq, Eq, Clone)]
+enum SpanTag {
+    Start(FragSpecs, usize),
+    End,
+}
+
+impl PartialOrd for SpanTag {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for SpanTag {
+    fn cmp(&self, other: &Self) -> Ordering {
+        // End < Start
+        // Start 2 < Start 1
+        match (self, other) {
+            (SpanTag::Start(_, _), SpanTag::End) => Ordering::Greater,
+            (SpanTag::End, SpanTag::Start(_, _)) => Ordering::Less,
+            (SpanTag::Start(_, len_self), SpanTag::Start(_, len_other)) => len_other.cmp(len_self),
+            (SpanTag::End, SpanTag::End) => Ordering::Equal,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
+enum SpanTagForRender {
+    Start(FragSpecs, Vec<FragSpecs>),
+    End,
+}
+
+fn span_tag_map(
+    len: usize,
+    ranges: HashMap<FragSpecs, Vec<Range<usize>>>,
+) -> Vec<Vec<SpanTagForRender>> {
+    let mut tags_all: Vec<Vec<SpanTag>> = (0..len + 1).map(|_| Vec::new()).collect();
 
     for (frag, ranges) in ranges.into_iter() {
-        for range in ranges {
-            for i in range {
-                classes[i].push(frag.to_string().to_ascii_lowercase());
+        for Range { start, end } in ranges {
+            if end == 0 || end > len {
+                // invalid range
+                continue;
+            }
+
+            tags_all[start].push(SpanTag::Start(frag, end - start));
+            tags_all[end].push(SpanTag::End);
+        }
+    }
+
+    for tags in tags_all.iter_mut() {
+        tags.sort(); // </span> </span> <span class="..."> <span class="...">
+    }
+
+    let mut stack = Vec::new();
+    let mut tags_for_render_all: Vec<Vec<SpanTagForRender>> =
+        (0..len + 1).map(|_| Vec::new()).collect();
+    for (i, tags_for_render) in tags_for_render_all.iter_mut().enumerate() {
+        for tag in tags_all[i].iter() {
+            match tag {
+                SpanTag::End => {
+                    stack.pop();
+
+                    tags_for_render.push(SpanTagForRender::End);
+                }
+                SpanTag::Start(frag, _) => {
+                    stack.push(*frag);
+
+                    tags_for_render.push(SpanTagForRender::Start(*frag, stack.clone()));
+                }
             }
         }
     }
 
-    classes
+    tags_for_render_all
 }
 
 fn to_html_string(content: &str, ranges: HashMap<FragSpecs, Vec<Range<usize>>>) -> String {
-    let classes_map = classes_map(content.bytes().len(), ranges);
+    let span_tag_map = span_tag_map(content.bytes().len(), ranges);
 
-    content
+    let mut res: String = content
         .char_indices()
         .map(|(i, c)| {
-            if !classes_map[i].is_empty() {
-                spanned(c, &classes_map[i])
-            } else {
-                encode_text(&c.to_string()).to_string()
+            let mut res = String::new();
+
+            for tag in &span_tag_map[i] {
+                let tag = match tag {
+                    SpanTagForRender::End => "</span>".to_string(),
+                    SpanTagForRender::Start(ref frag, ref frags) => {
+                        let frags = frags
+                            .iter()
+                            .map(|f| f.to_string().to_ascii_lowercase())
+                            .collect::<Vec<_>>()
+                            .join(" ");
+
+                        format!(
+                            "<span data-frag=\"{}\" class=\"{}\">",
+                            frag.to_string().to_ascii_lowercase(),
+                            frags
+                        )
+                    }
+                };
+                res.push_str(&tag);
             }
+
+            res.push_str(&encode_text(&c.to_string()));
+
+            res
         })
-        .collect()
-}
+        .collect();
 
-fn spanned(s: char, classes: &[String]) -> String {
-    let class = classes.join(" ");
+    for tag in span_tag_map.last().unwrap() {
+        if let &SpanTagForRender::End = tag {
+            res.push_str("</span>");
+        }
+    }
 
-    format!(
-        "<span class=\"{}\">{}</span>",
-        class,
-        encode_text(&s.to_string())
-    )
+    res
 }

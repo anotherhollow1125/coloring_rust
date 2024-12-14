@@ -1,0 +1,70 @@
+import './App.css';
+import InputField from "@/components/InputField";
+import { createTheme, Divider, ThemeProvider, Typography, useMediaQuery } from "@mui/material";
+import { useState } from "react";
+import OutputField from "@/components/OutputField";
+import { colored } from "coloring_wasm";
+import Grid from "@mui/material/Grid2";
+import FilterColumn from "@/components/filter/FilterColumn";
+import { initFilterArray } from "@/components/filter/types";
+import { initHighlightTargetArray } from "@/components/frags/types";
+import FragmentColumn from './components/frags/FragmentColumn';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: ["Source Code Pro", "serif"].join(","),
+  },
+  colorSchemes: {
+    dark: true,
+  },
+});
+
+function App() {
+  const [input, setInput] = useState("");
+  const [filterList, setFilterList] = useState(initFilterArray());
+  const is_dark_mode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [highlightTargetList, setHighlightTargetList] = useState(initHighlightTargetArray(is_dark_mode));
+
+  const { hit_top_filter, hit_filters, colored: output } = colored({
+    code: input,
+    filters: filterList
+      .flatMap(item => item.active ? [item.name] : []),
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <div
+        className="page"
+      >
+        <main className="main">
+          <h1>Rust フラグメント識別子判別器</h1>
+          <InputField input={input} setInput={setInput} minLines={4} maxLines={16}/>
+          <Typography className={hit_top_filter}>Whole Match: {hit_top_filter}</Typography>
+          <OutputField output={output} frags={highlightTargetList} hitTopFilter={hit_top_filter} maxLines={16} />
+          <Divider orientation="horizontal" />
+          <Grid container spacing={2}>
+          <Grid size={6}>
+            <FragmentColumn
+              fragmentList={highlightTargetList}
+              setFragmentList={setHighlightTargetList}
+            />
+          </Grid>
+          <Grid size={6}>
+            <FilterColumn
+              filterList={filterList}
+              setFilterList={setFilterList}
+              hit_top_filter={hit_top_filter}
+              hit_filters={hit_filters}
+            />
+          </Grid>
+        </Grid>
+        </main>
+        <footer className="footer">
+          ©️ namnium 2024
+        </footer>
+      </div>
+    </ThemeProvider>
+  );
+}
+
+export default App

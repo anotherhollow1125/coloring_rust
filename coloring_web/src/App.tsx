@@ -1,7 +1,7 @@
 import './App.css';
 import InputField from "@/components/InputField";
-import { createTheme, Divider, ThemeProvider, Typography, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+import { createTheme, Divider, FormControlLabel, FormGroup, Switch, ThemeProvider, Typography, useMediaQuery } from "@mui/material";
+import { useMemo, useState } from "react";
 import OutputField from "@/components/OutputField";
 import { colored } from "coloring_wasm";
 import Grid from "@mui/material/Grid2";
@@ -10,20 +10,25 @@ import { initFilterArray } from "@/components/filter/types";
 import { initHighlightTargetArray } from "@/components/frags/types";
 import FragmentColumn from './components/frags/FragmentColumn';
 
-const theme = createTheme({
-  typography: {
-    fontFamily: ["Source Code Pro", "serif"].join(","),
-  },
-  colorSchemes: {
-    dark: true,
-  },
-});
-
 function App() {
   const [input, setInput] = useState("");
   const [filterList, setFilterList] = useState(initFilterArray());
-  const is_dark_mode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [highlightTargetList, setHighlightTargetList] = useState(initHighlightTargetArray(is_dark_mode));
+  const [isDarkMode, setIsDarkModeInner] = useState(useMediaQuery('(prefers-color-scheme: dark)'));
+  const [highlightTargetList, setHighlightTargetList] = useState(initHighlightTargetArray(isDarkMode));
+
+  const theme = useMemo(() => createTheme({
+      typography: {
+        fontFamily: ["Source Code Pro", "serif"].join(","),
+      },
+      palette: {
+        mode: isDarkMode ? "dark" : "light",
+      },
+    }), [isDarkMode]);
+
+  const setIsDarkMode = (newMode: boolean) => {
+    setIsDarkModeInner(newMode);
+    setHighlightTargetList(initHighlightTargetArray(newMode));
+  };
 
   const { hit_top_filter, hit_filters, colored: output } = colored({
     code: input,
@@ -34,10 +39,16 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div
-        className="page"
+        className={`page ${isDarkMode ? "dark-mode" : "light-mode"}`}
       >
         <main className="main">
           <h1>Rust フラグメント識別子判別器</h1>
+          <FormGroup>
+            <FormControlLabel 
+              control = {<Switch checked={isDarkMode} onChange={() => setIsDarkMode(!isDarkMode)} />}
+              label="Dark Mode"
+            />
+          </FormGroup>
           <InputField input={input} setInput={setInput} minLines={4} maxLines={16}/>
           <Typography className={hit_top_filter}>Whole Match: {hit_top_filter}</Typography>
           <OutputField output={output} frags={highlightTargetList} hitTopFilter={hit_top_filter} maxLines={16} />
@@ -47,6 +58,7 @@ function App() {
             <FragmentColumn
               fragmentList={highlightTargetList}
               setFragmentList={setHighlightTargetList}
+              isDarkMode={isDarkMode}
             />
           </Grid>
           <Grid size={6}>

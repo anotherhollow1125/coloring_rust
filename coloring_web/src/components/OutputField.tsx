@@ -1,4 +1,4 @@
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { createFragsCss, HighlightTarget } from "./frags/types";
 import { useEffect, useState } from "react";
 import { ExpandMore } from "@mui/icons-material";
@@ -11,7 +11,6 @@ interface OutputFieldProps {
 }
 
 export default function OutputField({output, hitTopFilter, frags, maxLines}: OutputFieldProps) {
-  const { typography } = useTheme();
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -29,24 +28,23 @@ export default function OutputField({output, hitTopFilter, frags, maxLines}: Out
       <Typography
         sx={{
           width: '100%',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          // 展開時は行数制限を解除
-          WebkitLineClamp: expanded ? 'none' : maxLines,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
+          fontSize: "1.2em",
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          ...(expanded ? {
+            display: 'block',
+            overflow: 'visible',
+          } : {
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: maxLines,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          })
         }}
+        className={hitTopFilter}
+        dangerouslySetInnerHTML={{__html: output}}
       >
-        <pre
-          dangerouslySetInnerHTML={{__html: output}}
-          style={{
-            ...typography,
-            fontSize: "1.2em",
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-          }}
-          className={hitTopFilter}
-        />
       </Typography>
       <IconButton
         onClick={() => setExpanded(!expanded)}

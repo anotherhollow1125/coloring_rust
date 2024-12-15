@@ -129,7 +129,7 @@ checksum = "5b63caa9aa9397e2d9480a9b13673856c78d8ac123288526c37d7839f2a86990"
 
 [[package]]
 name = "coloring_cli"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "clap",
@@ -144,7 +144,7 @@ dependencies = [
 
 [[package]]
 name = "coloring_common"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "clap",
  "proc-macro2",
@@ -155,7 +155,7 @@ dependencies = [
 
 [[package]]
 name = "coloring_macro"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "itertools",
  "num-traits",
@@ -166,7 +166,7 @@ dependencies = [
 
 [[package]]
 name = "coloring_wasm"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "coloring_common",
  "coloring_macro",

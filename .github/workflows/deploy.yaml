@@ -38,7 +38,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
           path: './coloring_web/dist'
 
   # https://github.com/actions/deploy-pages

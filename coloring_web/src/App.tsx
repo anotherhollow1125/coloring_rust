@@ -42,7 +42,7 @@ function App() {
         className={`page ${isDarkMode ? "dark-mode" : "light-mode"}`}
       >
         <main className="main">
-          <h1>Rust フラグメント識別子判別器</h1>
+          <h1>Rust フラグメント指定子判別器</h1>
           <FormGroup>
             <FormControlLabel 
               control = {<Switch checked={isDarkMode} onChange={() => setIsDarkMode(!isDarkMode)} />}

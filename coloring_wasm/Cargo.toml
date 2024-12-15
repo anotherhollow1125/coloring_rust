@@ -1,6 +1,6 @@
 [package]
 name = "coloring_wasm"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["namnium"]
 repository = "https://github.com/anotherhollow1125/coloring_rust"
 edition = "2021"

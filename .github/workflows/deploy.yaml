@@ -1,0 +1,46 @@
+name: Deploy
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: 22
+      - name: Rust setup
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Wasm setup
+        run: |
+          rustup target add wasm32-unknown-unknown
+          cargo install wasm-pack
+      - name: Build WebAssembly
+        run: |
+          cd coloring_wasm
+          wasm-pack build --target bundler
+      - name: Build Page
+        run: |
+          cd coloring_web
+          npm install
+          npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

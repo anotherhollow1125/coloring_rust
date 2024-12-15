@@ -1,7 +1,9 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { HighlightTarget } from "./types";
-import { Box, Checkbox, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { DragIndicator } from "@mui/icons-material";
+import { Box, Checkbox, IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { ColorLens, DragIndicator } from "@mui/icons-material";
+import ColorSelectDialog from "./ColorSelectDialog";
+import { useState } from "react";
 
 interface FragmentItemProps {
   fragInfo: HighlightTarget;
@@ -20,9 +22,15 @@ export default function FragmentItem(
   const style = transform ? {
     transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
   } : undefined;
+  const [colorSelectOpen, setColorSelectOpen] = useState(false);
 
   return (<ListItem
-    sx={{ display: 'flex', alignItems: 'center', maxWidth: '600px' }}
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      maxWidth: '400px',
+      touchAction: 'none',
+    }}
     id={fragInfo.name}
     ref={setNodeRef}
     style={style}
@@ -39,6 +47,17 @@ export default function FragmentItem(
     </ListItemIcon>
 
     <ListItemText primary={fragInfo.name} className={fragInfo.name}/>
+
+    <IconButton onClick={() => setColorSelectOpen(true)}>
+      <ColorLens />
+    </IconButton>
+
+    <ColorSelectDialog
+      open={colorSelectOpen}
+      handleClose={() => setColorSelectOpen(false)}
+      highlightStyle={fragInfo.style}
+      setHighlightStyle={(style) => { setFragInfo({...fragInfo, style}); }}
+    />
 
     <Box
       sx={{ ml: 'auto' }}

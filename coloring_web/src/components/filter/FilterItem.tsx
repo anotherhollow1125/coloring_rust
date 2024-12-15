@@ -22,7 +22,12 @@ export default function FilterItem(
   } : undefined;
 
   return (<ListItem
-    sx={{ display: 'flex', alignItems: 'center', maxWidth: '400px' }}
+    sx={{
+      display: 'flex',
+      alignItems: 'center',
+      maxWidth: '400px',
+      touchAction: 'none',
+    }}
     id={filterName}
     ref={setNodeRef}
     style={style}

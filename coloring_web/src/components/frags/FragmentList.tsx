@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { HighlightTarget } from "./types";
 import { KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DndContext, closestCenter } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
@@ -19,7 +19,7 @@ export default function FragmentList({fragmentList, setFragmentList}: FragmentLi
     }),
   );
 
-  const handleDragEnd = useCallback(({active, over}: DragEndEvent) => {
+  const handleDragEnd = ({active, over}: DragEndEvent) => {
     if (over !== null && active.id !== over.id) {
       setFragmentList((list) => {
         const oldIndex = list.findIndex((item) => item.name === active.id);
@@ -28,7 +28,7 @@ export default function FragmentList({fragmentList, setFragmentList}: FragmentLi
         return arrayMove(list, oldIndex, newIndex);
       })
     }
-  }, [fragmentList]);
+  };
 
   return (
     <DndContext

@@ -3,11 +3,16 @@ export interface NamedColor {
   name: string;
 }
 
+export function namedColorNew(name: string): NamedColor {
+  return {
+    type_: 'named',
+    name,
+  };
+}
+
 export interface CustomColor {
   type_: 'custom';
-  r: number;
-  g: number;
-  b: number;
+  hex: string;
 }
 
 export type Color = NamedColor | CustomColor;
@@ -16,7 +21,7 @@ export function color2string(color: Color): string {
   if (color.type_ === 'named') {
     return color.name;
   } else {
-    return `rgb(${color.r}, ${color.g}, ${color.b})`;
+    return color.hex;
   }
 }
 

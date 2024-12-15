@@ -57,9 +57,10 @@ export default function FilterColumn({
         variant="outlined"
         onClick={() => {
           setFilterList(initFilterArray());
+          setAllActive(true);
         }}
       >
-        Reset Order
+        Reset All
       </Button>
     </>
   );

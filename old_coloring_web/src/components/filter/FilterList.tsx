@@ -3,7 +3,6 @@
 import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import FilterItem from "./FilterItem";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { useCallback } from "react";
 import { List } from "@mui/material";
 import { Filter } from "./types";
 
@@ -23,7 +22,7 @@ export default function FilterList({filterList, setFilterList, hitTopFilter, hit
     }),
   );
 
-  const handleDragEnd = useCallback(({active, over}: DragEndEvent) => {
+  const handleDragEnd = ({active, over}: DragEndEvent) => {
     if (over !== null && active.id !== over.id) {
       setFilterList((list) => {
         const oldIndex = list.findIndex((item) => item.name === active.id);
@@ -32,7 +31,7 @@ export default function FilterList({filterList, setFilterList, hitTopFilter, hit
         return arrayMove(list, oldIndex, newIndex);
       })
     }
-  }, [filterList]);
+  };
 
   return (
       <DndContext

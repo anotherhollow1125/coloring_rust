@@ -16,7 +16,7 @@ export default function FragmentColumn({fragmentList, setFragmentList, isDarkMod
   return (
     <>
       <ListItem
-        sx={{ display: 'flex', alignItems: 'center', maxWidth: '600px' }}
+        sx={{ display: 'flex', alignItems: 'center', maxWidth: '400px' }}
       >
         <ListItemIcon>
           <Checkbox
@@ -49,9 +49,10 @@ export default function FragmentColumn({fragmentList, setFragmentList, isDarkMod
         variant="outlined"
         onClick={() => {
           setFragmentList(initHighlightTargetArray(isDarkMode));
+          setAllTarget(true);
         }}
       >
-        Reset Order
+        Reset All
       </Button>
     </>
   );

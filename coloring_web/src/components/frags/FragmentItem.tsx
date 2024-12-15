@@ -29,7 +29,7 @@ export default function FragmentItem(
       display: 'flex',
       alignItems: 'center',
       maxWidth: '400px',
-      touchAction: 'none',
+      gap: '16px',
     }}
     id={fragInfo.name}
     ref={setNodeRef}
@@ -60,7 +60,10 @@ export default function FragmentItem(
     />
 
     <Box
-      sx={{ ml: 'auto' }}
+      sx={{
+        ml: 'auto',
+        touchAction: 'none'
+      }}
       {...listeners}
     >
       <DragIndicator />

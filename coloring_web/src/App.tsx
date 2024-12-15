@@ -54,14 +54,14 @@ function App() {
           <OutputField output={output} frags={highlightTargetList} hitTopFilter={hit_top_filter} maxLines={16} />
           <Divider orientation="horizontal" />
           <Grid container spacing={2}>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FragmentColumn
               fragmentList={highlightTargetList}
               setFragmentList={setHighlightTargetList}
               isDarkMode={isDarkMode}
             />
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FilterColumn
               filterList={filterList}
               setFilterList={setFilterList}

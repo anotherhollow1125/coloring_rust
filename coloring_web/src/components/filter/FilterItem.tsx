@@ -26,7 +26,7 @@ export default function FilterItem(
       display: 'flex',
       alignItems: 'center',
       maxWidth: '400px',
-      touchAction: 'none',
+      gap: '16px',
     }}
     id={filterName}
     ref={setNodeRef}
@@ -46,7 +46,10 @@ export default function FilterItem(
     <ListItemText primary={filterName} />
 
     <Box
-      sx={{ ml: 'auto' }}
+      sx={{
+        ml: 'auto',
+        touchAction: 'none'
+      }}
       {...listeners}
     >
       {icon(hit)}

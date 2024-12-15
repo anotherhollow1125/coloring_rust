@@ -24,6 +24,7 @@ fn main() {
     hello_i32();
     hello_u32();
 
+    #[allow(unused)]
     struct Fuga;
 
     repeat_for_types!(for T in [Fuga] {
@@ -35,6 +36,7 @@ fn main() {
 
     hello_Fuga();
 
+    #[allow(unused)]
     enum Eennumm {
         A,
         B,

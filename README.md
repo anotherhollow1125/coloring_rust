@@ -2,6 +2,8 @@
 
 # 🎨 Rust フラグメント指定子判別器 Fragment Specifiers Highlighter 🎨
 
+Deploy 👉️ https://rust-fragspecs.namnium.work/
+
 `ident` , `literal` , `ty` ...などなどのフラグメント指定子でRustコードを着色します！
 
 ## フラグメント指定子一覧

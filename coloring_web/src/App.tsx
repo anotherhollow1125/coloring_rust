@@ -1,6 +1,6 @@
 import './App.css';
 import InputField from "@/components/InputField";
-import { createTheme, Divider, FormControlLabel, FormGroup, Switch, ThemeProvider, Typography, useMediaQuery } from "@mui/material";
+import { createTheme, Divider, FormControlLabel, FormGroup, Link, Switch, ThemeProvider, Typography, useMediaQuery } from "@mui/material";
 import { useMemo, useState } from "react";
 import OutputField from "@/components/OutputField";
 import { colored } from "coloring_wasm";
@@ -69,11 +69,29 @@ function App() {
               hit_filters={hit_filters}
             />
           </Grid>
+          <Grid size={12} sx={{textAlign: "center"}}>
+            <Divider orientation="horizontal" />
+            <Typography variant='h4'>Links</Typography>
+            <Link href="https://github.com/anotherhollow1125/coloring_rust" target="_blank">
+              <Typography variant='h5'>GitHub</Typography>
+            </Link>
+            本ツールの開発リポジトリです。
+            <Link href="https://qiita.com/namn1125/items/93461ddf93277b79a96f" target="_blank">
+              <Typography variant='h5'>Qiita</Typography>
+            </Link>
+            本ツール開発の背景を書いています。
+          </Grid>
         </Grid>
         </main>
         <footer className="footer">
           ©️ namnium 2024
         </footer>
+      </div>
+      <div className="github-corner">
+        <div style={{backgroundColor: theme.palette.mode === "dark" ? "#ededed" : "gray"}}></div>
+        <a href="https://github.com/anotherhollow1125/coloring_rust" target="_blank">
+          <img src={theme.palette.mode === "dark" ? "./github-mark.png" : "./github-mark-white.png"}/>
+        </a>
       </div>
     </ThemeProvider>
   );

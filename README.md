@@ -1,6 +1,6 @@
 [![Deploy](https://github.com/anotherhollow1125/coloring_rust/actions/workflows/deploy.yaml/badge.svg)](https://github.com/anotherhollow1125/coloring_rust/actions/workflows/deploy.yaml)
 
-# :artist_palette: Rust フラグメント指定子判別器 Fragment Specifiers Highlighter :artist_palette:
+# 🎨 Rust フラグメント指定子判別器 Fragment Specifiers Highlighter 🎨
 
 `ident` , `literal` , `ty` ...などなどのフラグメント指定子でRustコードを着色します！
 
@@ -35,7 +35,7 @@
 
 - チェックボックスにチェックが入っているフラグメント指定子のみがハイライトされます。
 - 上にある指定子ほど他の指定子の色を上書きします。順番は一番右にあるハンドルをD&Dすることで変えられます。
-- カラーパレットアイコン :artist_palette: から、ハイライト色の変更や背景色でのハイライトへの変更が可能です。
+- カラーパレットアイコン 🎨 から、ハイライト色の変更や背景色でのハイライトへの変更が可能です。
 
 思うようなハイライトにならなかった時はチェックボックスを外したり順番を変えてみたりしてほしいです。
 

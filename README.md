@@ -1,4 +1,4 @@
-[![Deploy](https://github.com/anotherhollow1125/coloring_rust/actions/workflows/deploy.yaml/badge.svg)](https://github.com/anotherhollow1125/coloring_rust/actions/workflows/deploy.yaml)
+[![Deploy](https://github.com/anotherhollow1125/coloring_rust/actions/workflows/deploy.yaml/badge.svg?event=push)](https://github.com/anotherhollow1125/coloring_rust/actions/workflows/deploy.yaml)
 
 # 🎨 Rust フラグメント指定子判別器 Fragment Specifiers Highlighter 🎨
 
